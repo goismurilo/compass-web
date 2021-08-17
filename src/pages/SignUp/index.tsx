@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FiArrowLeft, FiMail, FiUser, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
+import * as Yup from 'yup';
 
 import logoImg from '../../assets/compass-orange.png';
 
@@ -10,7 +11,24 @@ import Button from '../../components/Button';
 import { Container, Content, Background } from './styles';
 
 const SingUp: React.FC = () => {
-    function handleSubmit(data: object): void { }
+    const handleSubmit = useCallback(async data => {
+        try {
+            const schema = Yup.object().shape({
+                name: Yup.string().required('Nome obrigatório'),
+                email: Yup.string()
+                    .required('Email obrigatório')
+                    .email('Digite um e-mail válido'),
+                password: Yup.string().min(6, 'No mínimo 6 dígitos'),
+            });
+
+            await schema.validate(data, {
+                abortEarly: false,
+            });
+        } catch (err) {
+            <h2>www</h2>;
+        }
+    }, []);
+
     return (
         <Container>
             <Background />
